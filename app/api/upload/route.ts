@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import * as XLSX from "xlsx";
 import { prisma } from "../../lib/prisma";
-import { excelDateToJavascript, parseMixedDateToDate } from "@/app/lib"; //TODO: get this working for enter/effective date
+import { excelDateToJavascript } from "@/app/lib";
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,30 +24,28 @@ export async function POST(req: NextRequest) {
 
     const rawRows = XLSX.utils.sheet_to_json<Record<string, any>>(sheet);
 
-const data = rawRows.map((row) => {
+    const data = rawRows.map((row) => {
 
-  const enteredStr = row["Entered Date"];      // CSV header
-  const effectiveStr = row["Effective Date"];  // adjust to your actual header
-  return {
-  account: String(row.account ?? ""),
-  accountDescription: String(row.account_description ?? ""),
-  enteredDate: enteredStr
-    ? excelDateToJavascript(enteredStr)
-    : null,
-  effectiveDate: effectiveStr
-    ? excelDateToJavascript(effectiveStr)
-    : null,
-  memo: String(row.memo ?? ""),
-  source: String(row.source ?? ""),
-  transaction: String(row.transaction ?? ""),
-  debit: String(row.debit ?? ""),
-  credit: String(row.credit ?? ""),
-  // type is optional, since not in all sample GL files
-  type: row.type ? String(row.type) : null,
-}
-});
-// console.log(data[0])
-
+      const enteredStr = row["Entered Date"];      // CSV header
+      const effectiveStr = row["Effective Date"];  // adjust to your actual header
+      return {
+        account: String(row.account ?? ""),
+        accountDescription: String(row.account_description ?? ""),
+        enteredDate: enteredStr
+          ? excelDateToJavascript(enteredStr)
+          : null,
+        effectiveDate: effectiveStr
+          ? excelDateToJavascript(effectiveStr)
+          : null,
+        memo: String(row.memo ?? ""),
+        source: String(row.source ?? ""),
+        transaction: String(row.transaction ?? ""),
+        debit: String(row.debit ?? ""),
+        credit: String(row.credit ?? ""),
+        // type is optional, since not in all sample GL files
+        type: row.type ? String(row.type) : null,
+      }
+    });
 
     if (data.length === 0) {
       return new Response(
