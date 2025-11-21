@@ -41,7 +41,6 @@ const UploadCsv: React.FC<UploadCsvProps> = ({
 
     setFileName(file.name);
     onFileSelected?.(file);
-
   };
 
   return (

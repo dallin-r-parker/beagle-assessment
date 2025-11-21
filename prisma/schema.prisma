@@ -17,8 +17,8 @@ model Transaction {
   id                 Int      @id @default(autoincrement())
   account            String
   accountDescription String
-  enteredDate        String
-  effectiveDate      String
+  enteredDate        DateTime?
+  effectiveDate      DateTime?
   memo               String
   source             String
   transaction        String
