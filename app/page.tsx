@@ -13,12 +13,13 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { fmtDate } from "./lib";
 
 type TransactionRecord = {
   account: string;
   accountDescription: string;
-  enteredDate: string;
-  effectiveDate: string;
+  enteredDate: Date;
+  effectiveDate: Date;
   memo: string;
   source: string;
   transaction: string;
@@ -80,8 +81,8 @@ const Page = () => {
                     <TableRow key={idx} hover>
                       <TableCell>{row.account}</TableCell>
                       <TableCell>{row.accountDescription}</TableCell>
-                      <TableCell>{row.enteredDate}</TableCell>
-                      <TableCell>{row.effectiveDate}</TableCell>
+                      <TableCell>{fmtDate(row.enteredDate)}</TableCell>
+                      <TableCell>{fmtDate(row.effectiveDate)}</TableCell>
                       <TableCell>{row.memo}</TableCell>
                       <TableCell>{row.source}</TableCell>
                       <TableCell>{row.transaction}</TableCell>

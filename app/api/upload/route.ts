@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import * as XLSX from "xlsx";
 import { prisma } from "../../lib/prisma";
-import { parseMixedDateToDate } from "@/app/lib"; //TODO: get this working for enter/effective date
+import { excelDateToJavascript, parseMixedDateToDate } from "@/app/lib"; //TODO: get this working for enter/effective date
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,15 +28,14 @@ const data = rawRows.map((row) => {
 
   const enteredStr = row["Entered Date"];      // CSV header
   const effectiveStr = row["Effective Date"];  // adjust to your actual header
-  console.log('enteredStr', enteredStr)
   return {
   account: String(row.account ?? ""),
   accountDescription: String(row.account_description ?? ""),
   enteredDate: enteredStr
-    ? parseMixedDateToDate(String(enteredStr))
+    ? excelDateToJavascript(enteredStr)
     : null,
   effectiveDate: effectiveStr
-    ? parseMixedDateToDate(String(effectiveStr))
+    ? excelDateToJavascript(effectiveStr)
     : null,
   memo: String(row.memo ?? ""),
   source: String(row.source ?? ""),
